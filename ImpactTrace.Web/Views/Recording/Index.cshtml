@@ -1,0 +1,143 @@
+@model IEnumerable<ImpactTrace.Web.Models.Recording>
+@{
+    ViewData["Title"] = "Recording Operations";
+    var currentRecordingId = ViewBag.CurrentRecordingId as int?;
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">SQL Recording Operations</h1>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Recording Control</h5>
+        </div>
+        <div class="card-body">
+            @if (currentRecordingId == null)
+            {
+                <form method="post" asp-action="StartRecording" class="row g-3">
+                    <div class="col-md-8">
+                        <label for="recordingName" class="form-label">Recording Name</label>
+                        <input type="text" class="form-control" id="recordingName" name="recordingName" 
+                               placeholder="Enter recording name" required>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-play-circle"></i> Start Recording
+                        </button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                var activeRecording = Model.FirstOrDefault(r => r.Id == currentRecordingId);
+                <div class="alert alert-info mb-3">
+                    <strong>Currently Recording:</strong> @activeRecording?.Name
+                    <br>
+                    <small>Started at: @activeRecording?.StartTime.ToString("yyyy-MM-dd HH:mm:ss")</small>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <form method="post" asp-action="StopRecording">
+                            <button type="submit" class="btn btn-danger w-100">
+                                <i class="bi bi-stop-circle"></i> Stop Recording
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <form method="post" asp-action="TestSql">
+                            <button type="submit" class="btn btn-secondary w-100">
+                                <i class="bi bi-database"></i> Generate Test SQL
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Recording History</h5>
+            <a asp-controller="Verification" asp-action="Index" class="btn btn-light btn-sm">
+                <i class="bi bi-search"></i> View Details & Verification
+            </a>
+        </div>
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <p class="text-muted">No recordings yet. Start a new recording to begin tracking SQL operations.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Status</th>
+                                <th>Operations Count</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var recording in Model)
+                            {
+                                <tr>
+                                    <td>@recording.Id</td>
+                                    <td>@recording.Name</td>
+                                    <td>@recording.StartTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td>
+                                        @if (recording.EndTime.HasValue)
+                                        {
+                                            @recording.EndTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">Recording...</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (recording.IsRecording)
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Completed</span>
+                                        }
+                                    </td>
+                                    <td>@recording.Operations.Count</td>
+                                    <td>
+                                        <a asp-controller="Verification" asp-action="Details" asp-route-id="@recording.Id" 
+                                           class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
