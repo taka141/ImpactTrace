@@ -127,6 +127,11 @@ dotnet run -f net10.0-maccatalyst
 4. **View Results**: Navigate to "🔍 Verification"
 5. **Export**: Download as Excel or CSV
 
+## 📚 Documentation
+
+- **[Architecture Guide](docs/ARCHITECTURE.md)** - Detailed DDD patterns, design decisions, and architecture overview
+- **[Platform Notes](docs/PLATFORM_NOTES.md)** - Windows/Mac requirements, build instructions, and platform-specific information
+
 ## 📄 License
 
 MIT License
