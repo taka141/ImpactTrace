@@ -1,0 +1,41 @@
+@inherits LayoutComponentBase
+
+<div class="min-h-screen bg-gray-50 flex flex-col">
+    <!-- Header with visual hierarchy (Gestalt principles) -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-900">
+                    <span class="text-blue-600">Impact</span>Trace
+                    <span class="text-sm font-normal text-gray-500 ml-2">SQL Recording Tool</span>
+                </h1>
+                <nav class="flex space-x-2">
+                    <NavLink class="px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
+                             href="/" Match="NavLinkMatch.All"
+                             ActiveClass="bg-blue-100 text-blue-700">
+                        📊 Recording
+                    </NavLink>
+                    <NavLink class="px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
+                             href="/verification"
+                             ActiveClass="bg-blue-100 text-blue-700">
+                        🔍 Verification
+                    </NavLink>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        @Body
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-auto">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">
+                © 2025 ImpactTrace - DDD Architecture with Modular Design
+            </p>
+        </div>
+    </footer>
+</div>

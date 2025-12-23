@@ -1,0 +1,291 @@
+@page "/"
+@using ImpactTrace.Core.Application.Interfaces
+@using ImpactTrace.Core.Application.DTOs
+@inject IRecordingService RecordingService
+@inject NavigationManager Navigation
+
+<PageTitle>Recording - ImpactTrace</PageTitle>
+
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div>
+        <h2 class="text-3xl font-bold text-gray-900">SQL Recording Operations</h2>
+        <p class="mt-2 text-gray-600">Start and manage SQL operation recording sessions</p>
+    </div>
+
+    <!-- Alert Messages -->
+    @if (!string.IsNullOrEmpty(_successMessage))
+    {
+        <div class="alert alert-success flex items-center justify-between">
+            <span>✅ @_successMessage</span>
+            <button @onclick="@(() => _successMessage = null)" class="text-green-800 hover:text-green-900">✕</button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="alert alert-error flex items-center justify-between">
+            <span>❌ @_errorMessage</span>
+            <button @onclick="@(() => _errorMessage = null)" class="text-red-800 hover:text-red-900">✕</button>
+        </div>
+    }
+
+    <!-- Recording Control Card - Prominent position (UX Psychology: Primacy Effect) -->
+    <div class="card">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Recording Control</h3>
+        
+        @if (_activeRecording == null)
+        {
+            <!-- Start Recording Form - Clear affordance -->
+            <div class="space-y-4">
+                <div>
+                    <label for="recordingName" class="block text-sm font-medium text-gray-700 mb-2">
+                        Recording Name
+                    </label>
+                    <input 
+                        id="recordingName"
+                        type="text"
+                        @bind="_recordingName"
+                        class="input-field"
+                        placeholder="Enter a descriptive name for this recording session"
+                        @onkeypress="HandleKeyPress"
+                    />
+                </div>
+                <button 
+                    @onclick="StartRecording"
+                    class="btn-primary w-full flex items-center justify-center space-x-2"
+                    disabled="@_isLoading">
+                    @if (_isLoading)
+                    {
+                        <span>⏳ Starting...</span>
+                    }
+                    else
+                    {
+                        <span>▶️ Start Recording</span>
+                    }
+                </button>
+            </div>
+        }
+        else
+        {
+            <!-- Active Recording Status - Clear feedback (UX Psychology: Feedback Principle) -->
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-blue-900">Currently Recording</p>
+                        <p class="text-lg font-bold text-blue-700">@_activeRecording.Name</p>
+                        <p class="text-sm text-blue-600 mt-1">
+                            Started: @_activeRecording.StartTime.ToString("yyyy-MM-dd HH:mm:ss")
+                        </p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="badge badge-active">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button 
+                    @onclick="StopRecording"
+                    class="btn-danger flex items-center justify-center space-x-2"
+                    disabled="@_isLoading">
+                    @if (_isLoading)
+                    {
+                        <span>⏳ Stopping...</span>
+                    }
+                    else
+                    {
+                        <span>⏹️ Stop Recording</span>
+                    }
+                </button>
+                <button 
+                    @onclick="GenerateTestSql"
+                    class="btn-secondary flex items-center justify-center space-x-2"
+                    disabled="@_isLoading">
+                    <span>🧪 Generate Test SQL</span>
+                </button>
+            </div>
+        }
+    </div>
+
+    <!-- Recording History Card -->
+    <div class="card">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold text-gray-900">Recording History</h3>
+            <a href="/verification" class="btn-secondary text-sm">
+                🔍 View Details & Verification →
+            </a>
+        </div>
+
+        @if (_recordings == null)
+        {
+            <div class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Loading recordings...</p>
+            </div>
+        }
+        else if (!_recordings.Any())
+        {
+            <div class="text-center py-12 bg-gray-50 rounded-lg">
+                <p class="text-gray-600">No recordings yet. Start a new recording to begin tracking SQL operations.</p>
+            </div>
+        }
+        else
+        {
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Status</th>
+                            <th>Operations</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var recording in _recordings)
+                        {
+                            <tr>
+                                <td class="font-mono text-sm">@recording.Id</td>
+                                <td class="font-medium">@recording.Name</td>
+                                <td class="text-sm text-gray-600">@recording.StartTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                <td class="text-sm text-gray-600">
+                                    @if (recording.EndTime.HasValue)
+                                    {
+                                        @recording.EndTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-yellow-100 text-yellow-800">Recording...</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (recording.Status == "Active")
+                                    {
+                                        <span class="badge badge-active">@recording.Status</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-completed">@recording.Status</span>
+                                    }
+                                </td>
+                                <td class="font-semibold text-blue-600">@recording.OperationCount</td>
+                                <td>
+                                    <a href="@($"/verification/{recording.Id}")" 
+                                       class="text-blue-600 hover:text-blue-800 font-medium">
+                                        View →
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private string? _recordingName;
+    private RecordingDto? _activeRecording;
+    private List<RecordingDto>? _recordings;
+    private string? _successMessage;
+    private string? _errorMessage;
+    private bool _isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _activeRecording = await RecordingService.GetActiveRecordingAsync();
+        _recordings = (await RecordingService.GetAllRecordingsAsync()).ToList();
+    }
+
+    private async Task StartRecording()
+    {
+        if (string.IsNullOrWhiteSpace(_recordingName))
+        {
+            _errorMessage = "Recording name is required.";
+            return;
+        }
+
+        _isLoading = true;
+        _errorMessage = null;
+
+        try
+        {
+            var recording = await RecordingService.StartRecordingAsync(_recordingName);
+            _successMessage = $"Recording '{recording.Name}' started successfully.";
+            _recordingName = null;
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task StopRecording()
+    {
+        _isLoading = true;
+        _errorMessage = null;
+
+        try
+        {
+            var recording = await RecordingService.StopRecordingAsync();
+            _successMessage = $"Recording '{recording.Name}' stopped successfully.";
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task GenerateTestSql()
+    {
+        _isLoading = true;
+        _errorMessage = null;
+
+        try
+        {
+            await RecordingService.CaptureTestSqlAsync();
+            _successMessage = "Generated 5 test SQL operations successfully.";
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(_recordingName))
+        {
+            await StartRecording();
+        }
+    }
+}

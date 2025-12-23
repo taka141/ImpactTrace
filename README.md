@@ -1,157 +1,132 @@
-# ImpactTrace - SQL Recording and Tracing Tool
+# ImpactTrace - Desktop SQL Recording and Tracing Tool
 
-ImpactTrace is an ASP.NET Core MVC application that records and traces SQL operations (INSERT, UPDATE, DELETE) performed during a recording session. It provides a comprehensive interface for starting/stopping recordings, viewing captured SQL operations, filtering by various criteria, and exporting data to Excel or CSV formats.
+ImpactTrace is a cross-platform **desktop application** built with **.NET MAUI Blazor Hybrid** that records and traces SQL operations (INSERT, UPDATE, DELETE) during recording sessions. The application follows **Domain-Driven Design (DDD)** and **Modular Monolith** architecture principles for maintainability and scalability.
 
-## Features
+## 🏗️ Architecture
 
-### 1. Recording Operation Screen (記録操作画面)
-- **Start/Stop Recording**: Control recording sessions with a simple button interface
-- **Recording Name Input**: Assign meaningful names to each recording session
-- **Auto Recording ID**: Automatically generates unique IDs for each recording
-- **Time-based Recording**: Captures all SQL operations between start and end times
+### Project Structure (Modular Monolith + DDD)
 
-### 2. SQL Interception Module (SQL傍受モジュール)
-- **SQL Capture**: Intercepts and captures SQL operations
-- **Operation Type Detection**: Identifies INSERT, UPDATE, and DELETE operations
-- **Table Name Extraction**: Automatically extracts table names from SQL statements
-- **Recording Association**: Links captured SQL with the active recording ID
+```
+ImpactTrace/
+├── src/
+│   ├── ImpactTrace.Core/              # Domain & Application Layer
+│   │   ├── Domain/
+│   │   │   ├── Entities/              # Aggregate roots and entities
+│   │   │   ├── ValueObjects/          # Value objects (immutable)
+│   │   │   └── Repositories/          # Repository interfaces
+│   │   └── Application/
+│   │       ├── DTOs/                  # Data Transfer Objects
+│   │       └── Interfaces/            # Application service interfaces
+│   ├── ImpactTrace.Infrastructure/    # Infrastructure Layer
+│   │   ├── Data/                      # EF Core DbContext
+│   │   ├── Repositories/              # Repository implementations
+│   │   └── Services/                  # Service implementations
+│   └── ImpactTrace.Maui/              # Presentation Layer (MAUI Blazor)
+│       ├── Components/                # Blazor pages and layouts
+│       ├── Resources/                 # Platform resources
+│       └── wwwroot/css/               # Tailwind CSS
+```
 
-### 3. Recording Verification Screen (記録確認画面)
-- **Operation List Display**: Shows all operations grouped by recording name
-- **Detailed Information**: Displays table name, operation type, and SQL text for each operation
-- **Advanced Filtering**: Filter operations by:
-  - Operation type (INSERT, UPDATE, DELETE)
-  - Table name
-  - Time period (start and end time)
-- **Export Functionality**: Export recordings to Excel (ClosedXML) or CSV format
-- **Summary Statistics**: View operation summaries by type and table
+### Design Principles
 
-## Technology Stack
+#### 1. **Domain-Driven Design (DDD)**
+- **Entities**: `Recording` (aggregate root), `SqlOperation`
+- **Value Objects**: `RecordingName`, `TableName`, `SqlText`, `OperationType`
+- **Repositories**: Abstraction for data access
+- **Domain Logic**: Encapsulated in entities
 
-- **Framework**: ASP.NET Core 10.0 MVC
-- **Database**: SQLite (Entity Framework Core)
-- **UI**: Bootstrap 5 with Bootstrap Icons
-- **Excel Export**: ClosedXML
-- **Architecture**: Model-View-Controller (MVC) pattern
+#### 2. **Modular Monolith**
+- **Core Layer**: Pure domain logic, no dependencies
+- **Infrastructure Layer**: Implements interfaces from Core
+- **Presentation Layer**: MAUI Blazor UI
 
-## Getting Started
+#### 3. **CQRS Pattern**
+- Commands: `StartRecording`, `StopRecording`
+- Queries: `GetActiveRecording`, `GetAllRecordings`
+
+## 🎨 UI/UX Design (Following UX Psychology Principles)
+
+### UX Psychology Principles Applied
+
+Based on [UX Psychology principles](https://www.shokasonjuku.com/ux-psychology):
+
+1. **Visual Hierarchy** - Primary actions prominently displayed
+2. **Feedback Principle** - Real-time status indicators
+3. **Affordance** - Buttons look clickable with clear states
+4. **Consistency** - Uniform design throughout
+5. **Color Psychology** - Green for start, Red for stop, Blue for info
+
+### Tailwind CSS Implementation
+
+All UI components use **Tailwind CSS** with custom utility classes.
+
+## 📱 Platform Support
+
+- ✅ **Windows 10/11** (x64, ARM64)
+- ✅ **macOS** (Intel, Apple Silicon)
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- .NET 10.0 SDK or later
-- A modern web browser
+- .NET 10 SDK or later
+- .NET MAUI workload: `dotnet workload install maui`
 
-### Installation
+### Running the Application
 
-1. Clone the repository:
+**On Windows**:
 ```bash
-git clone https://github.com/taka141/ImpactTrace.git
-cd ImpactTrace
+cd src/ImpactTrace.Maui
+dotnet run -f net10.0-windows10.0.19041.0
 ```
 
-2. Restore dependencies:
+**On Mac**:
 ```bash
-cd ImpactTrace.Web
-dotnet restore
+cd src/ImpactTrace.Maui
+dotnet run -f net10.0-maccatalyst
 ```
 
-3. Build the application:
-```bash
-dotnet build
-```
+## 📋 Features
 
-4. Run the application:
-```bash
-dotnet run
-```
+### 1. Recording Operation Screen (記録操作画面)
+- Start/Stop recording with prominent buttons
+- Recording name input
+- Real-time status with pulsing animation
+- Test SQL generation
 
-5. Open your browser and navigate to `http://localhost:5000` (or the URL shown in the console)
+### 2. SQL Interception Module (SQL傍受モジュール)
+- Captures INSERT, UPDATE, DELETE operations
+- Regex-based table name extraction
+- Links operations to active recording
 
-## Usage
+### 3. Recording Verification Screen (記録確認画面)
+- List recordings with operation counts
+- Filter by operation type, table name, time
+- Export to Excel (ClosedXML) or CSV
 
-### Recording SQL Operations
+## 🔧 Technical Stack
 
-1. **Start a Recording**:
-   - Enter a recording name in the "Recording Name" field
-   - Click the "Start Recording" button
-   - The system will begin capturing SQL operations
+- **Framework**: .NET 10 + MAUI Blazor Hybrid
+- **UI**: Blazor + Tailwind CSS
+- **Database**: SQLite + EF Core
+- **Architecture**: DDD + Modular Monolith
+- **Export**: ClosedXML (Excel), CSV
 
-2. **Generate Test Data** (for testing):
-   - While recording is active, click "Generate Test SQL" button
-   - This creates sample INSERT, UPDATE, and DELETE operations
+## 🎯 Architecture Benefits
 
-3. **Stop Recording**:
-   - Click the "Stop Recording" button when done
-   - The recording will be saved with an end timestamp
+- **Maintainability**: Clear separation of concerns
+- **Testability**: Domain logic isolated
+- **Scalability**: Can extract to microservices
+- **Cross-Platform**: Windows & Mac from single codebase
 
-### Viewing and Filtering Operations
+## 📝 Usage
 
-1. Navigate to the "Verification" page from the top menu
-2. Use the filter options to narrow down operations:
-   - **Operation Type**: Filter by INSERT, UPDATE, or DELETE
-   - **Table Name**: Filter by specific table names
-   - **Time Period**: Set start and/or end time filters
-3. Click "Apply Filter" to apply the filters
-4. Click "Clear Filters" to reset all filters
+1. **Start Recording**: Enter name, click "▶️ Start Recording"
+2. **Capture SQL**: Use "🧪 Generate Test SQL" for testing
+3. **Stop Recording**: Click "⏹️ Stop Recording"
+4. **View Results**: Navigate to "🔍 Verification"
+5. **Export**: Download as Excel or CSV
 
-### Exporting Data
+## 📄 License
 
-From the Verification or Details page:
-- Click **"Excel"** button to download an Excel (.xlsx) file
-- Click **"CSV"** button to download a CSV file
-
-Both formats include:
-- Operation ID
-- Table Name
-- Operation Type
-- Full SQL Text
-- Execution Timestamp
-
-## Project Structure
-
-```
-ImpactTrace.Web/
-├── Controllers/
-│   ├── RecordingController.cs      # Recording start/stop operations
-│   └── VerificationController.cs   # Viewing and exporting operations
-├── Data/
-│   └── ApplicationDbContext.cs     # EF Core database context
-├── Models/
-│   ├── Recording.cs                # Recording entity
-│   ├── SqlOperation.cs             # SQL operation entity
-│   └── VerificationViewModel.cs    # View models for verification
-├── Services/
-│   └── SqlInterceptorService.cs    # SQL interception service
-├── Views/
-│   ├── Recording/
-│   │   └── Index.cshtml           # Recording control interface
-│   └── Verification/
-│       ├── Index.cshtml           # Operations list and filtering
-│       └── Details.cshtml         # Detailed recording view
-└── Program.cs                      # Application entry point
-```
-
-## Database Schema
-
-### Recordings Table
-- `Id` (INT, Primary Key)
-- `Name` (VARCHAR(200))
-- `StartTime` (DATETIME)
-- `EndTime` (DATETIME, nullable)
-- `IsRecording` (BOOLEAN)
-
-### SqlOperations Table
-- `Id` (INT, Primary Key)
-- `RecordingId` (INT, Foreign Key)
-- `TableName` (VARCHAR(100))
-- `OperationType` (VARCHAR(50))
-- `SqlText` (TEXT)
-- `ExecutedAt` (DATETIME)
-
-## License
-
-This project is licensed under the MIT License.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+MIT License
