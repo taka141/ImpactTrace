@@ -63,7 +63,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  dotnetVersion: '8.0.x'
+  dotnetVersion: '10.0.x'
 
 stages:
 - stage: Validation
@@ -132,7 +132,7 @@ stages:
 Example `.gitlab-ci.yml`:
 
 ```yaml
-image: mcr.microsoft.com/dotnet/sdk:8.0
+image: mcr.microsoft.com/dotnet/sdk:10.0
 
 stages:
   - validate
@@ -301,7 +301,7 @@ dotnet test
 ```json
 {
   "sdk": {
-    "version": "8.0.100",
+    "version": "10.0.100",
     "rollForward": "latestMinor"
   }
 }

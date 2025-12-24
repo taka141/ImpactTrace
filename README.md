@@ -53,7 +53,7 @@ ImpactTrace/
 
 ### Prerequisites
 
-- [.NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0) or later
+- [.NET SDK 10.0](https://dotnet.microsoft.com/download/dotnet/10.0) or later
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Git](https://git-scm.com/)
 
@@ -279,4 +279,4 @@ dotnet build /p:EnforceCodeStyleInBuild=true
 
 ---
 
-**Built with ❤️ using .NET 8.0 and modern development practices**
+**Built with ❤️ using .NET 10.0 and modern development practices**
