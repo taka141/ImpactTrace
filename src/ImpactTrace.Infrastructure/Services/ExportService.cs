@@ -2,6 +2,7 @@ using System.IO;
 using ClosedXML.Excel;
 using ImpactTrace.Core.Application.Interfaces;
 using ImpactTrace.Core.Domain.Repositories;
+using ImpactTrace.Core.Domain.ValueObjects;
 
 namespace ImpactTrace.Infrastructure.Services;
 
