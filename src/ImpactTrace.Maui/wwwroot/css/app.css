@@ -1,0 +1,119 @@
+/* Tailwind CSS imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles following UX psychology principles */
+:root {
+    --primary-color: #10b981; /* Green for success/start actions */
+    --danger-color: #ef4444; /* Red for stop/danger actions */
+    --info-color: #3b82f6; /* Blue for informational elements */
+    --warning-color: #f59e0b; /* Orange for warnings */
+    --neutral-color: #6b7280; /* Gray for neutral elements */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+}
+
+/* Visual hierarchy - emphasize primary actions */
+.btn-primary {
+    @apply px-6 py-3 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 ease-in-out;
+    background-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    @apply shadow-xl transform scale-105;
+    filter: brightness(110%);
+}
+
+.btn-danger {
+    @apply px-6 py-3 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 ease-in-out;
+    background-color: var(--danger-color);
+}
+
+.btn-danger:hover {
+    @apply shadow-xl transform scale-105;
+    filter: brightness(110%);
+}
+
+.btn-secondary {
+    @apply px-4 py-2 bg-gray-500 text-white font-medium rounded-lg shadow transition-all duration-200;
+}
+
+.btn-secondary:hover {
+    @apply bg-gray-600 shadow-md;
+}
+
+/* Card design with depth */
+.card {
+    @apply bg-white rounded-xl shadow-lg p-6 transition-all duration-200;
+}
+
+.card:hover {
+    @apply shadow-xl;
+}
+
+/* Input fields with clear affordance */
+.input-field {
+    @apply w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200;
+}
+
+/* Status badges with color coding */
+.badge {
+    @apply px-3 py-1 text-sm font-semibold rounded-full;
+}
+
+.badge-active {
+    @apply bg-green-100 text-green-800;
+}
+
+.badge-completed {
+    @apply bg-gray-100 text-gray-800;
+}
+
+.badge-insert {
+    @apply bg-green-100 text-green-800;
+}
+
+.badge-update {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.badge-delete {
+    @apply bg-red-100 text-red-800;
+}
+
+/* Alert messages */
+.alert {
+    @apply p-4 rounded-lg mb-4 border-l-4;
+}
+
+.alert-success {
+    @apply bg-green-50 border-green-500 text-green-800;
+}
+
+.alert-error {
+    @apply bg-red-50 border-red-500 text-red-800;
+}
+
+.alert-info {
+    @apply bg-blue-50 border-blue-500 text-blue-800;
+}
+
+/* Table styles */
+.table {
+    @apply w-full text-sm text-left;
+}
+
+.table thead {
+    @apply bg-gray-50 text-gray-700 uppercase text-xs font-semibold;
+}
+
+.table tbody tr {
+    @apply border-b hover:bg-gray-50 transition-colors;
+}
+
+.table td, .table th {
+    @apply px-6 py-4;
+}
