@@ -57,3 +57,19 @@ nunit-*.xml
 *.db
 *.db-shm
 *.db-wal
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+!.vscode/README.md
+
+# Local History for VSCode
+.history/
+.ionide/
+
+# JetBrains Rider
+.idea/
+*.sln.iml

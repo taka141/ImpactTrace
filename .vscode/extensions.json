@@ -1,0 +1,52 @@
+{
+  "recommendations": [
+    // C# Development (Required)
+    "ms-dotnettools.csharp",
+    "ms-dotnettools.csdevkit",
+    "ms-dotnettools.vscodeintellicode-csharp",
+    
+    // Code Quality & Analysis
+    "editorconfig.editorconfig",
+    
+    // Testing
+    "ms-dotnettools.vscode-dotnet-runtime",
+    
+    // XML Support (for .csproj files)
+    "redhat.vscode-xml",
+    
+    // JSON/YAML
+    "redhat.vscode-yaml",
+    
+    // Git
+    "eamodio.gitlens",
+    "donjayamanne.githistory",
+    
+    // AI/Productivity
+    "github.copilot",
+    "github.copilot-chat",
+    
+    // Documentation
+    "yzhang.markdown-all-in-one",
+    
+    // Better Comments
+    "aaron-bond.better-comments",
+    
+    // Error Lens (show diagnostics inline)
+    "usernamehw.errorlens",
+    
+    // Path Intellisense
+    "christian-kohler.path-intellisense",
+    
+    // TODO Highlight
+    "wayou.vscode-todo-highlight",
+    
+    // Code Spell Checker
+    "streetsidesoftware.code-spell-checker"
+  ],
+  "unwantedRecommendations": [
+    // Avoid conflicting formatters
+    "ms-vscode.csharp",
+    // Old C# extension
+    "jchannon.csharpextensions"
+  ]
+}
