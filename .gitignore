@@ -60,6 +60,7 @@ nunit-*.xml
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
+!.vscode/README.md
 
 # Local History for VSCode
 .history/
