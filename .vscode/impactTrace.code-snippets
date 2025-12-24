@@ -1,0 +1,276 @@
+{
+  // Place your ImpactTrace workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+  // Placeholders with the same ids are connected.
+  
+  "Class with constructor and private fields": {
+    "scope": "csharp",
+    "prefix": "class-ctor",
+    "body": [
+      "public class ${1:ClassName}",
+      "{",
+      "\tprivate readonly ${2:string} _${3:fieldName};",
+      "",
+      "\tpublic ${1:ClassName}(${2:string} ${3:fieldName})",
+      "\t{",
+      "\t\tArgumentNullException.ThrowIfNull(${3:fieldName});",
+      "\t\t_${3:fieldName} = ${3:fieldName};",
+      "\t}",
+      "",
+      "\t$0",
+      "}"
+    ],
+    "description": "Creates a class with constructor and private readonly field with null check"
+  },
+  
+  "Async method with CancellationToken": {
+    "scope": "csharp",
+    "prefix": "async-ct",
+    "body": [
+      "public async Task<${1:ReturnType}> ${2:MethodName}Async(${3:ParameterType} ${4:parameter}, CancellationToken cancellationToken = default)",
+      "{",
+      "\tArgumentNullException.ThrowIfNull(${4:parameter});",
+      "\tcancellationToken.ThrowIfCancellationRequested();",
+      "",
+      "\t$0",
+      "",
+      "\treturn ${5:result};",
+      "}"
+    ],
+    "description": "Creates an async method with CancellationToken parameter and null check"
+  },
+  
+  "Interface definition": {
+    "scope": "csharp",
+    "prefix": "interface",
+    "body": [
+      "public interface I${1:InterfaceName}",
+      "{",
+      "\t$0",
+      "}"
+    ],
+    "description": "Creates an interface with I prefix"
+  },
+  
+  "Record type": {
+    "scope": "csharp",
+    "prefix": "record",
+    "body": [
+      "public record ${1:RecordName}(",
+      "\t${2:string} ${3:PropertyName}$0",
+      ");"
+    ],
+    "description": "Creates a record type with positional parameters"
+  },
+  
+  "xUnit Fact test": {
+    "scope": "csharp",
+    "prefix": "test-fact",
+    "body": [
+      "[Fact]",
+      "public void ${1:MethodName}_${2:Scenario}_${3:ExpectedBehavior}()",
+      "{",
+      "\t// Arrange",
+      "\t$0",
+      "",
+      "\t// Act",
+      "",
+      "\t// Assert",
+      "}"
+    ],
+    "description": "Creates an xUnit Fact test with AAA pattern"
+  },
+  
+  "xUnit Theory test": {
+    "scope": "csharp",
+    "prefix": "test-theory",
+    "body": [
+      "[Theory]",
+      "[InlineData(${1:value1})]",
+      "[InlineData(${2:value2})]",
+      "public void ${3:MethodName}_${4:Scenario}_${5:ExpectedBehavior}(${6:Type} ${7:parameter})",
+      "{",
+      "\t// Arrange",
+      "\t$0",
+      "",
+      "\t// Act",
+      "",
+      "\t// Assert",
+      "}"
+    ],
+    "description": "Creates an xUnit Theory test with InlineData and AAA pattern"
+  },
+  
+  "Guard clause with ArgumentNullException": {
+    "scope": "csharp",
+    "prefix": "guard-null",
+    "body": [
+      "ArgumentNullException.ThrowIfNull(${1:parameter});"
+    ],
+    "description": "Adds ArgumentNullException.ThrowIfNull guard clause"
+  },
+  
+  "Guard clause for string": {
+    "scope": "csharp",
+    "prefix": "guard-string",
+    "body": [
+      "if (string.IsNullOrWhiteSpace(${1:parameter}))",
+      "{",
+      "\tthrow new ArgumentException(\"Value cannot be null or whitespace.\", nameof(${1:parameter}));",
+      "}"
+    ],
+    "description": "Adds string null/whitespace guard clause"
+  },
+  
+  "Dispose pattern": {
+    "scope": "csharp",
+    "prefix": "dispose",
+    "body": [
+      "private bool _disposed;",
+      "",
+      "protected virtual void Dispose(bool disposing)",
+      "{",
+      "\tif (!_disposed)",
+      "\t{",
+      "\t\tif (disposing)",
+      "\t\t{",
+      "\t\t\t// Dispose managed resources",
+      "\t\t\t$0",
+      "\t\t}",
+      "",
+      "\t\t// Dispose unmanaged resources",
+      "",
+      "\t\t_disposed = true;",
+      "\t}",
+      "}",
+      "",
+      "public void Dispose()",
+      "{",
+      "\tDispose(disposing: true);",
+      "\tGC.SuppressFinalize(this);",
+      "}"
+    ],
+    "description": "Implements IDisposable pattern"
+  },
+  
+  "Async dispose pattern": {
+    "scope": "csharp",
+    "prefix": "dispose-async",
+    "body": [
+      "private bool _disposed;",
+      "",
+      "protected virtual async ValueTask DisposeAsyncCore()",
+      "{",
+      "\tif (_disposed)",
+      "\t{",
+      "\t\treturn;",
+      "\t}",
+      "",
+      "\t// Dispose async resources",
+      "\t$0",
+      "",
+      "\t_disposed = true;",
+      "}",
+      "",
+      "public async ValueTask DisposeAsync()",
+      "{",
+      "\tawait DisposeAsyncCore().ConfigureAwait(false);",
+      "\tDispose(disposing: false);",
+      "\tGC.SuppressFinalize(this);",
+      "}",
+      "",
+      "protected virtual void Dispose(bool disposing)",
+      "{",
+      "\tif (!_disposed)",
+      "\t{",
+      "\t\tif (disposing)",
+      "\t\t{",
+      "\t\t\t// Dispose managed resources",
+      "\t\t}",
+      "\t\t_disposed = true;",
+      "\t}",
+      "}",
+      "",
+      "public void Dispose()",
+      "{",
+      "\tDispose(disposing: true);",
+      "\tGC.SuppressFinalize(this);",
+      "}"
+    ],
+    "description": "Implements IAsyncDisposable and IDisposable pattern"
+  },
+  
+  "Property with backing field": {
+    "scope": "csharp",
+    "prefix": "prop-field",
+    "body": [
+      "private ${1:string} _${2:propertyName};",
+      "",
+      "public ${1:string} ${2/(.*)/${1:/capitalize}/}",
+      "{",
+      "\tget => _${2:propertyName};",
+      "\tset",
+      "\t{",
+      "\t\tArgumentNullException.ThrowIfNull(value);",
+      "\t\t_${2:propertyName} = value;",
+      "\t}",
+      "}"
+    ],
+    "description": "Creates a property with backing field and null check in setter"
+  },
+  
+  "Nullable reference type check": {
+    "scope": "csharp",
+    "prefix": "null-check",
+    "body": [
+      "if (${1:variable} is null)",
+      "{",
+      "\t$0",
+      "}"
+    ],
+    "description": "Adds a null check using pattern matching"
+  },
+  
+  "Try-catch with logging": {
+    "scope": "csharp",
+    "prefix": "try-log",
+    "body": [
+      "try",
+      "{",
+      "\t$0",
+      "}",
+      "catch (${1:Exception} ex)",
+      "{",
+      "\t_logger.LogError(ex, \"${2:Error message}\");",
+      "\tthrow;",
+      "}"
+    ],
+    "description": "Try-catch block with logging"
+  },
+  
+  "File-scoped namespace": {
+    "scope": "csharp",
+    "prefix": "namespace-file",
+    "body": [
+      "namespace ${1:NamespaceName};",
+      "",
+      "$0"
+    ],
+    "description": "Creates a file-scoped namespace (C# 10+)"
+  },
+  
+  "Primary constructor": {
+    "scope": "csharp",
+    "prefix": "class-primary",
+    "body": [
+      "public class ${1:ClassName}(${2:Type} ${3:parameter})",
+      "{",
+      "\t$0",
+      "}"
+    ],
+    "description": "Creates a class with primary constructor (C# 12+)"
+  }
+}

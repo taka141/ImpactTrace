@@ -1,0 +1,137 @@
+{
+  // C# Language Server Configuration
+  "dotnet.server.useOmnisharp": false, // Use C# Dev Kit by default (2025 recommendation)
+  "csharp.semanticHighlighting.enabled": true,
+  "csharp.inlayHints.enableInlayHintsForParameters": true,
+  "csharp.inlayHints.enableInlayHintsForLiteralParameters": true,
+  "csharp.inlayHints.enableInlayHintsForIndexerParameters": true,
+  "csharp.inlayHints.enableInlayHintsForObjectCreationParameters": true,
+  "csharp.inlayHints.enableInlayHintsForOtherParameters": true,
+  "csharp.inlayHints.enableInlayHintsForTypes": true,
+  "csharp.inlayHints.enableInlayHintsForImplicitVariableTypes": true,
+  "csharp.inlayHints.enableInlayHintsForLambdaParameterTypes": true,
+  "csharp.inlayHints.enableInlayHintsForImplicitObjectCreation": true,
+
+  // Code Analysis
+  "omnisharp.enableRoslynAnalyzers": true,
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.enableImportCompletion": true,
+  "omnisharp.organizeImportsOnFormat": true,
+  
+  // Formatter Configuration
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit",
+    "source.addMissingImports": "explicit"
+  },
+
+  // C# Specific Formatting
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.rulers": [120],
+    "files.trimTrailingWhitespace": true
+  },
+
+  // JSON Formatting
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+
+  // XML Formatting
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+
+  // Markdown Formatting
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.trimTrailingWhitespace": false
+  },
+
+  // File Management
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.eol": "\n",
+  "files.encoding": "utf8",
+  "files.autoSave": "onFocusChange",
+
+  // Editor Settings
+  "editor.rulers": [120],
+  "editor.renderWhitespace": "boundary",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.stickyScroll.enabled": true,
+  
+  // AI/Copilot Settings
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": false,
+    "markdown": true,
+    "csharp": true
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+  "editor.inlineSuggest.enabled": true,
+
+  // Terminal
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+
+  // Search
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/bin": true,
+    "**/obj": true,
+    "**/.git": true,
+    "**/packages": true
+  },
+
+  // File Associations
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+
+  // Testing
+  "dotnet.defaultSolution": "disable",
+  "csharp.showOmnisharpLogOnError": true,
+  "dotnet.backgroundAnalysis.analyzerDiagnosticsScope": "openFiles",
+  "dotnet.backgroundAnalysis.compilerDiagnosticsScope": "openFiles",
+
+  // Code Lens
+  "csharp.referencesCodeLens.enabled": true,
+  "csharp.testsCodeLens.enabled": true,
+
+  // Problems
+  "problems.showCurrentInStatus": true,
+  "problems.sortOrder": "severity",
+
+  // Explorer
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.csproj": "*.csproj.user, *.csproj.*.user",
+    "*.sln": "*.sln.DotSettings, *.sln.DotSettings.user"
+  }
+}
